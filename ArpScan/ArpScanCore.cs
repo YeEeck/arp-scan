@@ -2,7 +2,7 @@
 
 namespace ArpScan
 {
-    internal class Program
+    public class ArpScanCore
     {
         [DllImport("Iphlpapi.dll", ExactSpelling = true)]
         private static extern int SendARP(int destIp, int srcIp, byte[] macAddr, ref int phyAddrLen);
@@ -39,12 +39,15 @@ namespace ArpScan
             return result;
         }
 
-        public static void Main()
+        public static int GetIpRange(string ip_start, string ip_end)
         {
-            Console.Write("IP START:");
-            var ip_start = Console.ReadLine();
-            Console.Write("IP END:");
-            var ip_end = Console.ReadLine();
+            int ip_start_num = (int)IpStr2Uint(ip_start);
+            int ip_end_num = (int)IpStr2Uint(ip_end);
+            return ip_end_num - ip_start_num;
+        }
+
+        public static void Scan(string ip_start, string ip_end, Action<string, bool> callback)
+        {
             if (ip_start != null && ip_end != null)
             {
                 List<UInt32> successList = [];
@@ -59,10 +62,12 @@ namespace ArpScan
                         if (result)
                         {
                             successList.Add(IpStr2Uint(item));
+                            callback(item, true);
                             Console.WriteLine("Success:" + item);
                         }
                         else
                         {
+                            callback(item, false);
                             Console.WriteLine("Fail:" + item);
                         }
                         finishCount++;
@@ -75,7 +80,6 @@ namespace ArpScan
                     Console.WriteLine("Success:" + Uint2IpStr(item));
                 }
             }
-            Console.ReadLine();
         }
 
         private static List<string> GenerateIpList(string ip_start, string ip_end)
@@ -90,7 +94,7 @@ namespace ArpScan
             return result;
         }
 
-        private static UInt32 IpStr2Uint(string ip_str)
+        public static UInt32 IpStr2Uint(string ip_str)
         {
             byte[] ip_byte_list = new byte[4];
             string[] ip_byte_str_list = ip_str.Split('.').Reverse().ToArray();

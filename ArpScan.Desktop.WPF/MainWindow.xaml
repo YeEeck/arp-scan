@@ -1,0 +1,42 @@
+﻿<Window x:Class="ArpScan.Desktop.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ArpScan.Desktop.WPF" xmlns:viewmodel="clr-namespace:ArpScan.Desktop.WPF.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowsViewModel}"
+        mc:Ignorable="d"
+        Title="ArpScan" Height="600" Width="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid x:Name="ParamPanel" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,8,0" VerticalAlignment="Center">起始IP</TextBlock>
+            <TextBox Grid.Row="0" Grid.Column="1" Margin="0,4,0,4" Padding="2" Text="{Binding IpStart}"></TextBox>
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,8,0" VerticalAlignment="Center">结束IP</TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="0,4,0,4" Padding="2" Text="{Binding IpEnd}"></TextBox>
+        </Grid>
+        <Button Grid.Row="1" Margin="8,4,8,4" Padding="4" Command="{Binding DoScanCommand}" IsEnabled="{Binding ScanNotRunning}">扫描</Button>
+        <ProgressBar Grid.Row="2" Height="20" Margin="8" Minimum="0" Maximum="{Binding IpRange}" Value="{Binding ScanProgressValue}"></ProgressBar>
+        <TextBlock Grid.Row="3" Margin="4,4,0,4">扫描获得的IP</TextBlock>
+        <ListBox Grid.Row="4" Margin="8,0,8,0"  ItemsSource="{Binding ScanIpList}" ScrollViewer.CanContentScroll="True">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>

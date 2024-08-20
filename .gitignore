@@ -1,3 +1,5 @@
 /.vs
 /ArpScan/obj
 /ArpScan/bin
+/ArpScan.Desktop.WPF/obj
+/ArpScan.Desktop.WPF/bin
